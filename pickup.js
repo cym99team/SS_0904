@@ -14,10 +14,11 @@ import {
 	Modal,
 	Dimensions,
     ToastAndroid,
-    NetInfo,
+    
 } from 'react-native';
 import Button from 'react-native-share/components/Button';
 import Spinkiter from 'react-native-spinkit';
+import NetInfo from "@react-native-community/netinfo";
 
 
 const visible = null;
@@ -48,27 +49,8 @@ export default class pick extends React.Component {
 	
 	//選擇影片
 	selectVideoTapped() {
-        // NetInfo.fetch().then(isConnected => {
-        //     alert(isConnected);
-        //  });
-        
-		
-		// ToastAndroid.showWithGravity(
-  		// 'All Your Base Are Belong To Us',
-  		// ToastAndroid.SHORT,
-  		// ToastAndroid.CENTER,
-		// );
-		// ToastAndroid.showWithGravityAndOffset(
-		// 'A wild toast appeared!',
-		// ToastAndroid.LONG,
-		// ToastAndroid.BOTTOM,
-		// 25,
-		// 50,
-		// );
-
-		
-
-		var state = {
+       
+        var state = {
 			avatarSource: null,
 			video: null,
 		};
@@ -87,88 +69,97 @@ export default class pick extends React.Component {
 			}
 		};
 
-		ImagePicker.showImagePicker(options, (response) => {
+        if(NetInfo.isConnected==false){
+            ToastAndroid.show('Please check your Internet status', ToastAndroid.SHORT);
+        }
+        else{
+            ImagePicker.showImagePicker(options, (response) => {
             
-			console.log('Response = ', response);
+                console.log('Response = ', response);
+    
+                if (response.didCancel) {
+                    console.log('User cancelled video picker');
+                }
+                else if (response.error) {
+                    console.log('Error: ', response.error);
+                }
+                else {
+                    // ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
+                    this.state.modalVisible = true;
+                    this.setState({
+                        video: response
+                    });
+    
+    
+                    let video = this.state.video;
+                    let target_url = 'http://140.115.87.141:9888/';
+                    let localUri = video.uri;
+                    let filename = localUri.split('/').pop() + '.mp4';
+    
+                    console.log('\n\n\n');
+                    console.log(video);
+                    console.log('\n\n\n');
+                    // setInterval(() => {
+                    // 	this.setState({ text: 'Processing...' });
+                    //   }, 1000);
+                    // }
+                
+    
+                    let formData = new FormData();
+    
+                    formData.append('file', {
+                        name: filename,
+                        type: 'video/mp4',
+                        uri: video.uri,
+                        // .replace("file://", ""),     
+                    });
+    
+                    fetch(target_url, {
+                        method: 'POST',
+                        // body: JSON.stringify(formData),
+                        body: formData,
+                        headers: {
+                            // "Accept": "application/json",
+                            // "Content-Type": 'application/json',      
+                            'Content-Type': 'multipart/form-data'
+                      }	
+                    })
+                    .then(response => {
+                        console.log("upload success\n", response);
+                        ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
+                        //alert("Upload success!");
+                        this.state.modalVisible = false;
+                        //console.log('888')
+                        return response.text()
+                    })
+                    .catch(error => {
+                        
+                        console.log("\n\n\nupload error\n\n\n", error);
+                        //ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
+                        
+                        this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
+                        this.props.navigation.navigate('PickUp');
+                    })
+                    .then(textData => {
+                        this.setState({ name: textData })
+    
+                        //download.setState({name: textData})
+                        console.log(textData);
+                        textname = textData;
+                        //this.setState({ success:true})
+                        //console.log(this.state.success);
+                        //alert("okkkkk");
+    
+                        this.props.navigation.navigate('Load')
+                    })
+                }
+    
+            });
+        }
+		
+		
 
-			if (response.didCancel) {
-				console.log('User cancelled video picker');
-			}
-			else if (response.error) {
-				console.log('Error: ', response.error);
-			}
-			else {
-				// ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
-				this.state.modalVisible = true;
-				this.setState({
-					video: response
-				});
-
-
-				let video = this.state.video;
-				let target_url = 'http://140.115.87.141:9888/';
-				let localUri = video.uri;
-				let filename = localUri.split('/').pop() + '.mp4';
-
-				console.log('\n\n\n');
-				console.log(video);
-				console.log('\n\n\n');
-				// setInterval(() => {
-				// 	this.setState({ text: 'Processing...' });
-				//   }, 1000);
-				// }
-			
-
-				let formData = new FormData();
-
-				formData.append('file', {
-					name: filename,
-					type: 'video/mp4',
-					uri: video.uri,
-					// .replace("file://", ""),     
-				});
-
-				fetch(target_url, {
-					method: 'POST',
-					// body: JSON.stringify(formData),
-					body: formData,
-					headers: {
-						// "Accept": "application/json",
-						// "Content-Type": 'application/json',      
-						'Content-Type': 'multipart/form-data'
-				  }	
-				})
-				.then(response => {
-					console.log("upload success\n", response);
-					ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
-					//alert("Upload success!");
-					this.state.modalVisible = false;
-					//console.log('888')
-					return response.text()
-				})
-				.catch(error => {
-					
-					console.log("\n\n\nupload error\n\n\n", error);
-					//ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
-					
-					this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
-					this.props.navigation.navigate('PickUp');
-				})
-				.then(textData => {
-					this.setState({ name: textData })
-
-					//download.setState({name: textData})
-					console.log(textData);
-					textname = textData;
-					//this.setState({ success:true})
-					//console.log(this.state.success);
-					//alert("okkkkk");
-
-					this.props.navigation.navigate('Load')
-				})
-			}
-
-		});
+		
 
   }
 
