@@ -13,7 +13,8 @@ import {
 	Image,
 	Modal,
 	Dimensions,
-	ToastAndroid,
+    ToastAndroid,
+    NetInfo,
 } from 'react-native';
 import Button from 'react-native-share/components/Button';
 import Spinkiter from 'react-native-spinkit';
@@ -43,11 +44,15 @@ export default class pick extends React.Component {
 		text:'Uploading...',
 	};
 
-
+    
 	
 	//選擇影片
 	selectVideoTapped() {
-		ToastAndroid.show('Choose a video!', ToastAndroid.SHORT);
+        // NetInfo.fetch().then(isConnected => {
+        //     alert(isConnected);
+        //  });
+        
+		
 		// ToastAndroid.showWithGravity(
   		// 'All Your Base Are Belong To Us',
   		// ToastAndroid.SHORT,
@@ -83,7 +88,7 @@ export default class pick extends React.Component {
 		};
 
 		ImagePicker.showImagePicker(options, (response) => {
-
+            
 			console.log('Response = ', response);
 
 			if (response.didCancel) {
@@ -144,10 +149,10 @@ export default class pick extends React.Component {
 				.catch(error => {
 					
 					console.log("\n\n\nupload error\n\n\n", error);
-					ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
-					this.props.navigation.navigate('PickUp');
-					// this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
+					//ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
 					
+					this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
+					this.props.navigation.navigate('PickUp');
 				})
 				.then(textData => {
 					this.setState({ name: textData })
