@@ -13,12 +13,15 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Download from './download.js';
 // import Snap from './camera.js';
 import PickUp from './pickup';
-import loading from './loading';
+// import loading from './loading';
+import process from './process';
+
+
 
 
 
 class HomeScreen extends React.Component {
-
+ 
   render() {
     //let { image } = this.state;
 
@@ -59,7 +62,7 @@ const AppNavigator = createStackNavigator(
         header: null,
       }
     },
-    Wait: loading,
+    Wait: process,
 
   },
   {

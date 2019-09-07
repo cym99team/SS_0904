@@ -148,7 +148,7 @@ export default class Download extends React.Component {
   }
 
   ShareToIG() {
-    alert('file://'+RNFS.TemporaryDirectoryPath+'/'+global.textname);
+    // alert('file://'+RNFS.TemporaryDirectoryPath+'/'+global.textname);
     const shareOptions = {
       title: 'Share via',
       // message: 'some message',

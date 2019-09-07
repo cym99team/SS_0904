@@ -16,9 +16,10 @@ import {
     ToastAndroid,
     
 } from 'react-native';
-import Button from 'react-native-share/components/Button';
+import * as Progress from 'react-native-progress';
+// import Button from 'react-native-share/components/Button';
 import Spinkiter from 'react-native-spinkit';
-import NetInfo from "@react-native-community/netinfo";
+// import NetInfo from "@react-native-community/netinfo";
 
 
 const visible = null;
@@ -39,11 +40,21 @@ export default class pick extends React.Component {
 	// 		SplashScreen.hide();
 	// 	}, 2000);
 	// }
+	constructor(props) {
+        super(props);
+        this.state = {
+			modalVisible: false,
+			text:'Uploading...',
+            progress: 0,
+            indeterminate: true,
+        };
+    }
 
-	state = {
-		modalVisible: false,
-		text:'Uploading...',
-	};
+
+	// state = {
+	// 	progress: 0,
+	// 	indeterminate: true,
+	// };
 
     
 	
@@ -53,6 +64,7 @@ export default class pick extends React.Component {
         var state = {
 			avatarSource: null,
 			video: null,
+	
 		};
 
 		const options = {
@@ -69,10 +81,10 @@ export default class pick extends React.Component {
 			}
 		};
 
-        if(NetInfo.isConnected==false){
-            ToastAndroid.show('Please check your Internet status', ToastAndroid.SHORT);
-        }
-        else{
+        // if(NetInfo.isConnected==false){
+        //     ToastAndroid.show('Please check your Internet status', ToastAndroid.SHORT);
+        // }
+        // else{
             ImagePicker.showImagePicker(options, (response) => {
             
                 console.log('Response = ', response);
@@ -133,12 +145,11 @@ export default class pick extends React.Component {
                         return response.text()
                     })
                     .catch(error => {
-                        
+                        ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
                         console.log("\n\n\nupload error\n\n\n", error);
                         //ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
-                        
                         this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
-                        this.props.navigation.navigate('PickUp');
+                        // this.props.navigation.navigate('PickVid');
                     })
                     .then(textData => {
                         this.setState({ name: textData })
@@ -155,13 +166,31 @@ export default class pick extends React.Component {
                 }
     
             });
-        }
-		
-		
+        // }
 
-		
 
-  }
+    }
+	/**初始*/
+	componentDidMount() {
+		this.animate();
+	}	
+	animate(){
+		var progress = 0;
+		this.setState({ progress });
+		setTimeout(() => {
+			this.setState({ indeterminate: false });
+			setInterval(() => {
+				progress += Math.random()/5;
+				if(progress > 0.99) {
+					progress = 0.99;
+				}
+				this.setState({ progress });
+			}, 1000);
+		}, 1500);
+	}
+	/**结束*/
+	// componentWillUnmount() {
+	// }
 
 
 	render() {
@@ -174,9 +203,16 @@ export default class pick extends React.Component {
 					animationType="fade"
 					transparent={true}>
 					<View style={{flex: 1,backgroundColor:'black',alignItems: 'center',justifyContent: 'center'}}>
-						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >Loading</Text>
-						{/* <Text style={{ fontSize: 20, fontWeight: '100' ,color:"white"}} >- =͟͟͞͞ =͟͟͞͞ = ﾍ( ´Д`)ﾉ</Text> */}
-						<Spinkiter isVisible={true} size={80} type={'ThreeBounce'} color={"#ffffff"} />
+						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >Processing</Text>
+						<Progress.Circle 
+						 progress={this.state.progress}
+						 thickness={6} 
+						 unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
+                    	 color={"#BBFFEE"} 
+						 showsText={true} 
+						 textStyle={{fontSize:14,color:'red'}} 
+						 size={100} />
+						{/* <Spinkiter isVisible={true} size={80} type={'ThreeBounce'} color={"#ffffff"} /> */}
 					</View>
 				</Modal>
 
