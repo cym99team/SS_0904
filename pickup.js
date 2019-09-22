@@ -81,6 +81,8 @@ export default class pick extends React.Component {
 			}
 		};
 
+		
+
         // if(NetInfo.isConnected==false){
         //     ToastAndroid.show('Please check your Internet status', ToastAndroid.SHORT);
         // }
@@ -102,7 +104,8 @@ export default class pick extends React.Component {
                         video: response
                     });
     
-    
+			
+					
                     let video = this.state.video;
                     let target_url = 'http://140.115.87.141:9888/';
                     let localUri = video.uri;
@@ -160,7 +163,7 @@ export default class pick extends React.Component {
                         //this.setState({ success:true})
                         //console.log(this.state.success);
                         //alert("okkkkk");
-    
+						this.animate();
                         this.props.navigation.navigate('Load')
                     })
                 }
@@ -168,29 +171,28 @@ export default class pick extends React.Component {
             });
         // }
 
-
     }
 	/**初始*/
-	componentDidMount() {
-		this.animate();
-	}	
+	// componentDidMount() {
+	// 	this.animate();
+	// }	
 	animate(){
 		var progress = 0;
 		this.setState({ progress });
 		setTimeout(() => {
 			this.setState({ indeterminate: false });
 			setInterval(() => {
-				progress += Math.random()/5;
+				progress += Math.random()/10;
 				if(progress > 0.99) {
 					progress = 0.99;
 				}
 				this.setState({ progress });
-			}, 1000);
-		}, 1500);
+			}, 1500);
+		}, 500);
 	}
 	/**结束*/
-	// componentWillUnmount() {
-	// }
+	componentWillUnmount() {
+	}
 
 
 	render() {
@@ -203,14 +205,16 @@ export default class pick extends React.Component {
 					animationType="fade"
 					transparent={true}>
 					<View style={{flex: 1,backgroundColor:'black',alignItems: 'center',justifyContent: 'center'}}>
-						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >Processing</Text>
+						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >Processing...</Text>
+						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >          </Text>
 						<Progress.Circle 
 						 progress={this.state.progress}
 						 thickness={6} 
-						 unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
+						//  unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
+						 unfilledColor="black"
                     	 color={"#BBFFEE"} 
 						 showsText={true} 
-						 textStyle={{fontSize:14,color:'red'}} 
+						 textStyle={{fontSize:14,color:'white'}} 
 						 size={100} />
 						{/* <Spinkiter isVisible={true} size={80} type={'ThreeBounce'} color={"#ffffff"} /> */}
 					</View>
@@ -276,7 +280,7 @@ export default class pick extends React.Component {
 						</View>
 					</TouchableOpacity>
 
-					<TouchableOpacity onPress={() => this.selectVideoTapped()}
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('Demo')}
 						style={{
 							flexDirection: 'row',
 							justifyContent: 'center',

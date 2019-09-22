@@ -68,6 +68,7 @@ export default class Download extends React.Component {
           <View style={[styles.buttonstyle]}>
             <Image style={{ height: width * 0.05, width: width * 0.05, margin: 10 }} source={require('./Image/instagram.png')} />
             {/* <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#fff' }}>Share</Text> */}
+            
           </View>
         </TouchableOpacity>
 
@@ -202,8 +203,8 @@ const styles = StyleSheet.create({
     // borderColor: '#5c82cf',
     borderColor:'#fff',
     alignItems: 'center',
-    // backgroundColor: '#F5FCFF',
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'transparent',
+    // backgroundColor: 'rgba(0,0,0,0.3)',
     // borderWidth: 1,
     borderRadius: 999,
     padding: 10,

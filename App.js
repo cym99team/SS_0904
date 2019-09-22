@@ -15,6 +15,7 @@ import Download from './download.js';
 import PickUp from './pickup';
 // import loading from './loading';
 import process from './process';
+import Pose_demo from './posedemo.js';
 
 
 
@@ -58,6 +59,12 @@ const AppNavigator = createStackNavigator(
     },
     Load: {
       screen: Download,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    Demo: {
+      screen: Pose_demo,
       navigationOptions: {
         header: null,
       }
