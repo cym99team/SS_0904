@@ -16,7 +16,8 @@ import PickUp from './pickup';
 // import loading from './loading';
 import process from './process';
 import Pose_demo from './posedemo.js';
-
+import Heart_demo from './heart_demo.js';
+import BigHeart_demo from './bigheart_demo.js';
 
 
 
@@ -65,6 +66,18 @@ const AppNavigator = createStackNavigator(
     },
     Demo: {
       screen: Pose_demo,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    heartdemo: {
+      screen: Heart_demo,
+      navigationOptions: {
+        header: null,
+      }
+    },
+    bigheartdemo: {
+      screen: BigHeart_demo,
       navigationOptions: {
         header: null,
       }

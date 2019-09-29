@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+	Component
+} from 'react';
 import ImagePicker from 'react-native-image-picker';
 // import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 // var ImagePicker = require('react-native-image-picker');
@@ -13,8 +15,8 @@ import {
 	Image,
 	Modal,
 	Dimensions,
-    ToastAndroid,
-    
+	ToastAndroid,
+
 } from 'react-native';
 import * as Progress from 'react-native-progress';
 // import Button from 'react-native-share/components/Button';
@@ -41,14 +43,15 @@ export default class pick extends React.Component {
 	// 	}, 2000);
 	// }
 	constructor(props) {
-        super(props);
-        this.state = {
+		super(props);
+		this.state = {
 			modalVisible: false,
-			text:'Uploading...',
-            progress: 0,
-            indeterminate: true,
-        };
-    }
+			text: 'Uploading...',
+			progress: 0,
+			indeterminate: true,
+			
+		};
+	}
 
 
 	// state = {
@@ -56,15 +59,15 @@ export default class pick extends React.Component {
 	// 	indeterminate: true,
 	// };
 
-    
-	
+
+
 	//選擇影片
 	selectVideoTapped() {
-       
-        var state = {
+
+		var state = {
 			avatarSource: null,
 			video: null,
-	
+
 		};
 
 		const options = {
@@ -74,6 +77,7 @@ export default class pick extends React.Component {
 			chooseFromLibraryButtonTitle: 'Choose from CameraRoll',
 			mediaType: 'video',
 			videoQuality: 'high',
+			durationLimit: 15,
 
 			storageOptions: {
 				skipBackup: true,
@@ -81,118 +85,123 @@ export default class pick extends React.Component {
 			}
 		};
 
-		
 
-        // if(NetInfo.isConnected==false){
-        //     ToastAndroid.show('Please check your Internet status', ToastAndroid.SHORT);
-        // }
-        // else{
-            ImagePicker.showImagePicker(options, (response) => {
-            
-                console.log('Response = ', response);
-    
-                if (response.didCancel) {
-                    console.log('User cancelled video picker');
-                }
-                else if (response.error) {
-                    console.log('Error: ', response.error);
-                }
-                else {
-                    // ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
-                    this.state.modalVisible = true;
-                    this.setState({
-                        video: response
-                    });
-    
-			
-					
-                    let video = this.state.video;
-                    let target_url = 'http://140.115.87.141:9888/';
-                    let localUri = video.uri;
-                    let filename = localUri.split('/').pop() + '.mp4';
-    
-                    console.log('\n\n\n');
-                    console.log(video);
-                    console.log('\n\n\n');
-                    // setInterval(() => {
-                    // 	this.setState({ text: 'Processing...' });
-                    //   }, 1000);
-                    // }
-                
-    
-                    let formData = new FormData();
-    
-                    formData.append('file', {
-                        name: filename,
-                        type: 'video/mp4',
-                        uri: video.uri,
-                        // .replace("file://", ""),     
-                    });
-    
-                    fetch(target_url, {
-                        method: 'POST',
-                        // body: JSON.stringify(formData),
-                        body: formData,
-                        headers: {
-                            // "Accept": "application/json",
-                            // "Content-Type": 'application/json',      
-                            'Content-Type': 'multipart/form-data'
-                      }	
-                    })
-                    .then(response => {
-                        console.log("upload success\n", response);
-                        ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
-                        //alert("Upload success!");
-                        this.state.modalVisible = false;
-                        //console.log('888')
-                        return response.text()
-                    })
-                    .catch(error => {
-                        ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
-                        console.log("\n\n\nupload error\n\n\n", error);
-                        //ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
-                        this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
-                        // this.props.navigation.navigate('PickVid');
-                    })
-                    .then(textData => {
-                        this.setState({ name: textData })
-    
-                        //download.setState({name: textData})
-                        console.log(textData);
-                        textname = textData;
-                        //this.setState({ success:true})
-                        //console.log(this.state.success);
-                        //alert("okkkkk");
+
+		// if(NetInfo.isConnected==false){
+		//     ToastAndroid.show('Please check your Internet status', ToastAndroid.SHORT);
+		// }
+		// else{
+		ImagePicker.showImagePicker(options, (response) => {
+
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled video picker');
+			} else if (response.error) {
+				console.log('Error: ', response.error);
+			} else {
+				// ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
+				this.state.modalVisible = true;
+				this.setState({
+					video: response
+				});
+
+
+
+				let video = this.state.video;
+				let target_url = 'http://140.115.87.141:9888/';
+				let localUri = video.uri;
+				let filename = localUri.split('/').pop() + '.mp4';
+
+				console.log('\n\n\n');
+				console.log(video);
+				console.log('\n\n\n');
+				// setInterval(() => {
+				// 	this.setState({ text: 'Processing...' });
+				//   }, 1000);
+				// }
+
+
+				let formData = new FormData();
+
+				formData.append('file', {
+					name: filename,
+					type: 'video/mp4',
+					uri: video.uri,
+					// .replace("file://", ""),     
+				});
+
+				fetch(target_url, {
+					method: 'POST',
+					// body: JSON.stringify(formData),
+					body: formData,
+					headers: {
+						// "Accept": "application/json",
+						// "Content-Type": 'application/json',      
+						'Content-Type': 'multipart/form-data'
+					}
+				})
+					.then(response => {
+						console.log("upload success\n", response);
+						ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
+						//alert("Upload success!");
+						this.state.modalVisible = false;
+						//console.log('888')
+						return response.text()
+					})
+					.catch(error => {
+						ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
+						console.log("\n\n\nupload error\n\n\n", error);
+						//ToastAndroid.show('Upload Failed!', ToastAndroid.SHORT);
+						this.state.modalVisible = false; //上傳失敗 loading畫面會關掉
+						// this.props.navigation.navigate('PickVid');
+					})
+					.then(textData => {
+						this.setState({
+							name: textData
+						})
+
+						//download.setState({name: textData})
+						console.log(textData);
+						textname = textData;
+						//this.setState({ success:true})
+						//console.log(this.state.success);
+						//alert("okkkkk");
 						this.animate();
-                        this.props.navigation.navigate('Load')
-                    })
-                }
-    
-            });
-        // }
+						this.props.navigation.navigate('Load')
+					})
+			}
 
-    }
+		});
+		// }
+
+	}
 	/**初始*/
 	// componentDidMount() {
 	// 	this.animate();
 	// }	
-	animate(){
+	animate() {
 		var progress = 0;
-		this.setState({ progress });
+		this.setState({
+			progress
+		});
 		setTimeout(() => {
-			this.setState({ indeterminate: false });
+			this.setState({
+				indeterminate: false
+			});
 			setInterval(() => {
-				progress += Math.random()/10;
-				if(progress > 0.99) {
+				progress += Math.random() / 10;
+				if (progress > 0.99) {
 					progress = 0.99;
 				}
-				this.setState({ progress });
+				this.setState({
+					progress
+				});
 			}, 1500);
 		}, 500);
 	}
 	/**结束*/
-	componentWillUnmount() {
-	}
+	componentWillUnmount() { }
 
 
 	render() {
@@ -200,44 +209,44 @@ export default class pick extends React.Component {
 
 			<View style={styles.container}>
 
-				<Modal
-					visible={this.state.modalVisible}
+				<Modal visible={this.state.modalVisible}
 					animationType="fade"
 					transparent={true}>
-					<View style={{flex: 1,backgroundColor:'black',alignItems: 'center',justifyContent: 'center'}}>
-						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >Processing...</Text>
-						<Text style={{ fontSize: 20, fontWeight: 'bold',color:"white" }} >          </Text>
-						<Progress.Circle 
-						 progress={this.state.progress}
-						 thickness={6} 
-						//  unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
-						 unfilledColor="black"
-                    	 color={"#BBFFEE"} 
-						 showsText={true} 
-						 textStyle={{fontSize:14,color:'white'}} 
-						 size={100} />
-						{/* <Spinkiter isVisible={true} size={80} type={'ThreeBounce'} color={"#ffffff"} /> */}
+					<View style={{
+						flex: 1,
+						backgroundColor: 'black',
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}>
+					<Text style={{
+							fontSize: 20,
+							fontWeight: 'bold',
+							color: "white"
+					}}> Processing... </Text>
+					<Progress.Circle progress={this.state.progress}
+							thickness={6}
+							//  unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
+							unfilledColor="black"
+							color={"#BBFFEE"}
+							showsText={true}
+							textStyle={{
+								fontSize: 14,
+								color: 'white'
+							}}
+							size={100}
+					/>
 					</View>
 				</Modal>
 
 
-				{/* <View style={{
-					// flex: 1,
-					flexDirection: 'column',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}
-				}> */}
-
-				{/* <Image style={{ width: width * 0.6, height: width * 0.6 }} source={require('./Image/logo.png')} /> */}
 				<Image style={{
-					width: width*1.3,
-					height: height*1.3,
+					width: width * 1.3,
+					height: height * 1.3,
 					position: 'absolute',
-					top: -height*0.25,
-				}} source={require('./Image/black.png')} />
-				{/* <Image style={{width:200, height:200}} source={require('./Image/logo.png')}/> */}
-
+					top: -height * 0.25,
+				}}
+					source={require('./Image/black.png')}
+				/>
 
 				<View style={{
 					// flex: 1,
@@ -248,36 +257,36 @@ export default class pick extends React.Component {
 					// borderWidth: 1,
 					marginBottom: height * 0.15,
 
-				}}>
+				}} >
 					<Text style={{
 						fontSize: 15,
 						fontWeight: 'bold',
 						color: '#fff',
 						marginBottom: 20,
-					}}>Welcome to Stunning !</Text>
-							
+					}}> Welcome to Stunning! </Text>
+
 					<TouchableOpacity onPress={() => this.selectVideoTapped()}
 						style={{
 							flexDirection: 'row',
 							justifyContent: 'center',
 							alignItems: 'center'
-						}}>
-						{/* <TouchableOpacity onPress={this.selectVideoTapped.bind(this)}> */}
-						<View style={[styles.buttonstyle,{
-							backgroundColor:'#fff'
-						}]}>
+						}} >
+						<View style={[styles.buttonstyle, {
+							backgroundColor: '#fff'
+						}]} >
 							<Image style={{
 								height: width * 0.05,
 								width: width * 0.05,
 								margin: 10,
-								opacity:0.5,
-							}} source={require('./Image/video-camera_black.png')} />
+								opacity: 0.5,
+							}}
+								source={require('./Image/video-camera_black.png')} />
 							<Text style={{
 								fontSize: 15,
 								fontWeight: 'bold',
 								color: '#999'
-							}}>Choose a Video</Text>
-						</View>
+							}} > Choose a Video </Text>
+						</View >
 					</TouchableOpacity>
 
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Demo')}
@@ -286,21 +295,24 @@ export default class pick extends React.Component {
 							justifyContent: 'center',
 							alignItems: 'center'
 						}}>
-						<View style={[styles.buttonstyle]}>
+						<View style={
+							[styles.buttonstyle]
+						}>
 							<Image style={{
-									height: width * 0.05,
-									width: width * 0.05,
-									margin: 10
-							}} source={require('./Image/dance.png')} />
-							<Text style={{
-									fontSize: 15,
-									fontWeight: 'bold',
-									color: '#fff'
-							}}>Pose Demo</Text>
-						</View>
+								height: width * 0.05,
+								width: width * 0.05,
+								margin: 10
+							}}
+								source={require('./Image/dance.png')}
+							/><Text style={{
+								fontSize: 15,
+								fontWeight: 'bold',
+								color: '#fff'
+							}}> Pose Demo </Text>
+						</View >
 					</TouchableOpacity>
-				</View>
-			</View>           
+				</View >
+			</View>
 		);
 	}
 
@@ -337,7 +349,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		// borderColor: '#5c82cf',
-		borderColor:'#fff',
+		borderColor: '#fff',
 		alignItems: 'center',
 		// backgroundColor: '#F5FCFF',
 		backgroundColor: 'transparent',
