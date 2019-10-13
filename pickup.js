@@ -223,7 +223,8 @@ export default class pick extends React.Component {
 							fontWeight: 'bold',
 							color: "white"
 					}}> Processing... </Text>
-					<Progress.Circle progress={this.state.progress}
+					<Spinkiter isVisible={true} size={85} type={'ThreeBounce'} color={"#ffffff"} />
+					{/* <Progress.Circle progress={this.state.progress}
 							thickness={6}
 							//  unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
 							unfilledColor="black"
@@ -234,7 +235,8 @@ export default class pick extends React.Component {
 								color: 'white'
 							}}
 							size={100}
-					/>
+					/> */}
+
 					</View>
 				</Modal>
 

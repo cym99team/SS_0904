@@ -24,6 +24,9 @@ export default class Download extends React.Component {
   state = {
     name: null,
   };
+  componentDidMount() {
+    alert("Please download before sharing!")
+  }
 
   // saveVideo = (source) => {
   //   CameraRoll.saveToCameraRoll(source, 'video');
