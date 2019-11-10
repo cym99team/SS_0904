@@ -24,9 +24,9 @@ export default class Download extends React.Component {
   state = {
     name: null,
   };
-  componentDidMount() {
-    alert("Please download before sharing!")
-  }
+  // componentDidMount() {
+  //   ToastAndroid.show("Please download before sharing!",ToastAndroid.CENTER)
+  // }
 
   // saveVideo = (source) => {
   //   CameraRoll.saveToCameraRoll(source, 'video');
@@ -38,13 +38,14 @@ export default class Download extends React.Component {
 
     return (
 
-      <View style={[styles.container]}>      
+      <View style={[styles.container]}>
+        
         <Video
+          // source={{ uri:'http://140.115.87.141:9888/static/Video/heart.mp4' }}
           source={{ uri:'http://140.115.87.141:9888/static/'+global.textname }} //http://techslides.com/demos/sample-videos/small.mp4
           // source={{ uri:'http://techslides.com/demos/sample-videos/small.mp4' }}
           // url = {'http://140.115.87.141:9888/static/'+global.textname}
-          // source={require('./Image/V_20190810_233541_vHDR_Auto.mp4')}
-          // source={require('./Image/small.mp4')}
+          
           autoplay
           repeat={true}
           rate={1.0}
@@ -60,7 +61,6 @@ export default class Download extends React.Component {
             // resizeMode:'contain',
           }}
         />  
-        
         <TouchableOpacity onPress={this.ShareToIG}
           style={{
             flexDirection: 'row',
@@ -108,6 +108,7 @@ export default class Download extends React.Component {
 
 
   downloadFile() {
+    // ToastAndroid.show("Download the Video!",ToastAndroid.CENTER)
     // const downloadDest = RNFS.DocumentDirectoryPath+'/'+global.textname;
     // RNFS.mkdir( RNFS.DocumentDirectoryPath + '/favorite/')
     // const downloadDest ='file://'+RNFS.DocumentDirectoryPath+'/'+global.textname;
@@ -155,14 +156,10 @@ export default class Download extends React.Component {
     // alert('file://'+RNFS.TemporaryDirectoryPath+'/'+global.textname);
     const shareOptions = {
       title: 'Share via',
-      // message: 'some message',
       url:'file://'+RNFS.TemporaryDirectoryPath+'/'+global.textname,
       social: Share.Social.INSTAGRAM
     };
     Share.shareSingle(shareOptions);
-    // Share.open(shareOptions)
-    // .then((res) => { console.log(res) })
-    // .catch((err) => { err && alert(err); });
   };
 
   ShareToFB() {

@@ -4,7 +4,7 @@ import React, {
 import ImagePicker from 'react-native-image-picker';
 // import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 // var ImagePicker = require('react-native-image-picker');
-
+import RNFetchBlob from 'rn-fetch-blob';
 import {
 	Platform,
 	StyleSheet,
@@ -122,25 +122,38 @@ export default class pick extends React.Component {
 				// }
 
 
-				let formData = new FormData();
+				// let formData = new FormData();
 
-				formData.append('file', {
-					name: filename,
-					type: 'video/mp4',
-					uri: video.uri,
-					// .replace("file://", ""),     
-				});
+				// formData.append('file', {
+				// 	name: filename,
+				// 	type: 'video/mp4',
+				// 	uri: video.uri,
+				// 	// .replace("file://", ""),     
+				// });
 
-				fetch(target_url, {
-					method: 'POST',
-					// body: JSON.stringify(formData),
-					body: formData,
-					headers: {
-						// "Accept": "application/json",
-						// "Content-Type": 'application/json',      
-						'Content-Type': 'multipart/form-data'
-					}
-				})
+				RNFetchBlob.fetch('POST', target_url, {
+				
+					'Content-Type': 'multipart/form-data'
+						
+				},[
+					{ 	
+						name: 'file',
+						filename: filename,
+						type: 'video/mp4',
+					 	data: RNFetchBlob.wrap(video.uri) 
+					},
+					// custom content type
+				])
+
+				// fetch(target_url, {
+				// 	method: 'POST',
+				// 	// body: JSON.stringify(formData),
+				// 	body: formData,
+				// 	headers: {
+				// 		// "Accept": "application/json",    
+				// 		'Content-Type': 'multipart/form-data'
+				// 	}
+				// })
 					.then(response => {
 						console.log("upload success\n", response);
 						ToastAndroid.show('Upload Success!', ToastAndroid.SHORT);
@@ -223,7 +236,8 @@ export default class pick extends React.Component {
 							fontWeight: 'bold',
 							color: "white"
 					}}> Processing... </Text>
-					<Spinkiter isVisible={true} size={85} type={'ThreeBounce'} color={"#ffffff"} />
+					<Text>  </Text>
+					<Spinkiter isVisible={true} size={85} type={'WanderingCubes'} color={"#ffffff"} />
 					{/* <Progress.Circle progress={this.state.progress}
 							thickness={6}
 							//  unfilledColor="rgba(255,255,255,0.5)" // 剩余进度的颜色
